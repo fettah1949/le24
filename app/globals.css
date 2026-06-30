@@ -1,0 +1,71 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-news-bg text-news-text antialiased;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-serif;
+  }
+}
+
+@layer components {
+  .container-main {
+    @apply mx-auto max-w-7xl px-4 sm:px-6 lg:px-8;
+  }
+
+  .prose-article {
+    @apply max-w-none text-base leading-relaxed text-news-text/90;
+  }
+
+  .prose-article h2 {
+    @apply mt-8 mb-4 text-2xl font-serif font-bold text-news-text;
+  }
+
+  .prose-article h3 {
+    @apply mt-6 mb-3 text-xl font-serif font-bold text-news-text;
+  }
+
+  .prose-article p {
+    @apply mb-4;
+  }
+
+  .prose-article a {
+    @apply text-brand-600 underline hover:text-brand-700;
+  }
+
+  .prose-article ul {
+    @apply mb-4 list-disc pl-6;
+  }
+
+  .prose-article img {
+    @apply my-6 rounded-lg;
+  }
+
+  .btn-primary {
+    @apply inline-flex items-center justify-center rounded-md bg-brand-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-brand-700 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:ring-offset-2 disabled:opacity-50;
+  }
+
+  .btn-secondary {
+    @apply inline-flex items-center justify-center rounded-md border border-news-border bg-white px-4 py-2 text-sm font-medium text-news-text transition-colors hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:ring-offset-2;
+  }
+
+  .input-field {
+    @apply block w-full rounded-md border border-news-border bg-white px-3 py-2 text-sm placeholder:text-news-muted focus:border-brand-500 focus:outline-none focus:ring-1 focus:ring-brand-500;
+  }
+
+  .label-field {
+    @apply block text-sm font-medium text-news-text mb-1;
+  }
+
+  [dir="rtl"] .prose-article {
+    text-align: right;
+  }
+}
