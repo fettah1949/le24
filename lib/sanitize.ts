@@ -1,34 +1,38 @@
-import DOMPurify from "isomorphic-dompurify";
+import sanitizeHtmlLib from "sanitize-html";
 
-const ALLOWED_TAGS = [
-  "p",
-  "br",
-  "strong",
-  "em",
-  "u",
-  "h2",
-  "h3",
-  "h4",
-  "ul",
-  "ol",
-  "li",
-  "a",
-  "blockquote",
-  "img",
-  "figure",
-  "figcaption",
-  "span",
-];
-
-const ALLOWED_ATTR = ["href", "src", "alt", "title", "class"];
+const SANITIZE_OPTIONS: sanitizeHtmlLib.IOptions = {
+  allowedTags: [
+    "p",
+    "br",
+    "strong",
+    "em",
+    "u",
+    "h2",
+    "h3",
+    "h4",
+    "ul",
+    "ol",
+    "li",
+    "a",
+    "blockquote",
+    "img",
+    "figure",
+    "figcaption",
+    "span",
+  ],
+  allowedAttributes: {
+    a: ["href", "title", "target"],
+    img: ["src", "alt", "title"],
+    span: ["class"],
+    p: ["class"],
+    figure: ["class"],
+    figcaption: ["class"],
+  },
+  allowedSchemes: ["http", "https", "mailto"],
+};
 
 export function sanitizeHtml(dirty: string): string {
-  return DOMPurify.sanitize(dirty, {
-    ALLOWED_TAGS,
-    ALLOWED_ATTR,
-    ALLOW_DATA_ATTR: false,
-    ADD_ATTR: ["target"],
-  });
+  return sanitizeHtmlLib(dirty, SANITIZE_OPTIONS);
 }
 
 export function sanitizeJsonLd(data: unknown): string {
