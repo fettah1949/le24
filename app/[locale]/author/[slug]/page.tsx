@@ -2,6 +2,7 @@ import { notFound } from "next/navigation";
 import Image from "next/image";
 import type { Metadata } from "next";
 import { Breadcrumbs } from "@/components/news/Breadcrumbs";
+import { resolveImageSrc } from "@/lib/image-url";
 import { ArticleCard } from "@/components/news/ArticleCard";
 import { Pagination } from "@/components/news/Pagination";
 import { SectionHeading } from "@/components/news/SectionHeading";
@@ -85,7 +86,7 @@ export default async function AuthorPage({ params, searchParams }: PageProps) {
           {author.avatar && (
             <div className="relative h-24 w-24 flex-shrink-0 overflow-hidden rounded-full">
               <Image
-                src={author.avatar}
+                src={resolveImageSrc(author.avatar) ?? author.avatar}
                 alt={author.name}
                 fill
                 className="object-cover"

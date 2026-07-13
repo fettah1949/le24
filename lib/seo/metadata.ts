@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { absoluteUrl, getSiteName, getSiteUrl } from "@/lib/utils";
+import { resolveImageSrc } from "@/lib/image-url";
 import { locales, type Locale } from "@/lib/i18n/config";
 import { localizedPath } from "@/lib/i18n/paths";
 
@@ -44,8 +45,11 @@ export function buildMetadata(config: SeoConfig): Metadata {
   const siteName = getSiteName();
   const canonicalPath = `${localizedPath(config.locale, config.pathWithoutLocale)}${config.queryString ?? ""}`;
   const url = absoluteUrl(canonicalPath);
-  const image = config.image
-    ? absoluteUrl(config.image.startsWith("http") ? config.image : config.image)
+  const imagePath = config.image
+    ? resolveImageSrc(config.image) ?? config.image
+    : null;
+  const image = imagePath
+    ? absoluteUrl(imagePath)
     : absoluteUrl("/og-default.jpg");
 
   const alternateLocale = locales.filter((l) => l !== config.locale);
@@ -108,7 +112,9 @@ export function buildNewsArticleJsonLd(
     "@type": "NewsArticle",
     headline: article.title,
     description: article.excerpt ?? article.title,
-    image: article.featuredImage ? [absoluteUrl(article.featuredImage)] : [],
+    image: article.featuredImage
+      ? [absoluteUrl(resolveImageSrc(article.featuredImage) ?? article.featuredImage)]
+      : [],
     datePublished: article.publishedAt?.toISOString(),
     dateModified: article.updatedAt.toISOString(),
     inLanguage: locale === "ar" ? "ar-MA" : "fr-FR",
@@ -171,7 +177,9 @@ export function buildPersonJsonLd(
     name: author.name,
     url: absoluteUrl(localizedPath(locale, `/author/${author.slug}`)),
     description: author.bio,
-    image: author.avatar ? absoluteUrl(author.avatar) : undefined,
+    image: author.avatar
+      ? absoluteUrl(resolveImageSrc(author.avatar) ?? author.avatar)
+      : undefined,
     sameAs: [author.twitter, author.website].filter(Boolean),
   };
 }

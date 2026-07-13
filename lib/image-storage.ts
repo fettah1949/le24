@@ -22,7 +22,15 @@ function hasCloudinaryConfig(): boolean {
 }
 
 function getBlobAccess(): "public" | "private" {
-  return process.env.BLOB_ACCESS === "private" ? "private" : "public";
+  if (process.env.BLOB_ACCESS === "public") return "public";
+  return "private";
+}
+
+export async function getBlobClientOptions(
+  access: "public" | "private" = getBlobAccess()
+) {
+  const auth = await getVercelBlobAuth();
+  return { access, ...auth };
 }
 
 async function getVercelBlobAuth(): Promise<{
@@ -100,13 +108,13 @@ async function uploadToCloudinary(buffer: Buffer, ext: string): Promise<string> 
 async function uploadToVercelBlob(buffer: Buffer, ext: string): Promise<string> {
   const { put } = await import("@vercel/blob");
   const filename = `uploads/${Date.now()}-${crypto.randomUUID()}.${ext}`;
-  const auth = await getVercelBlobAuth();
+  const access = getBlobAccess();
+  const options = await getBlobClientOptions(access);
 
   const blob = await put(filename, buffer, {
-    access: getBlobAccess(),
+    ...options,
     contentType: getMime(ext),
     addRandomSuffix: false,
-    ...auth,
   });
 
   return blob.url;

@@ -1,6 +1,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { cn, formatRelativeDate } from "@/lib/utils";
+import { resolveImageSrc } from "@/lib/image-url";
 import { localizedPath } from "@/lib/i18n/paths";
 import type { Locale } from "@/lib/i18n/config";
 import type { Dictionary } from "@/lib/i18n/types";
@@ -33,7 +34,7 @@ export function ArticleCard({
           <div className="relative aspect-[16/10] overflow-hidden sm:aspect-[16/9]">
             {article.featuredImage ? (
               <Image
-                src={article.featuredImage}
+                src={resolveImageSrc(article.featuredImage) ?? article.featuredImage}
                 alt={article.title}
                 fill
                 priority={priority}
@@ -84,7 +85,7 @@ export function ArticleCard({
         >
           {article.featuredImage ? (
             <Image
-              src={article.featuredImage}
+              src={resolveImageSrc(article.featuredImage) ?? article.featuredImage}
               alt={article.title}
               fill
               className="object-cover transition-transform group-hover:scale-105"
@@ -141,7 +142,7 @@ export function ArticleCard({
         <div className="relative aspect-[16/10] overflow-hidden rounded-lg">
           {article.featuredImage ? (
             <Image
-              src={article.featuredImage}
+              src={resolveImageSrc(article.featuredImage) ?? article.featuredImage}
               alt={article.title}
               fill
               priority={priority}

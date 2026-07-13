@@ -132,7 +132,7 @@ export async function middleware(request: NextRequest) {
   }
 
   // Protect admin API routes
-  const publicApiRoutes = ["/api/auth/login", "/api/newsletter"];
+  const publicApiRoutes = ["/api/auth/login", "/api/newsletter", "/api/media"];
   if (
     pathname.startsWith("/api/") &&
     !publicApiRoutes.some((r) => pathname.startsWith(r))

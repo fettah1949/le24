@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { generateSlug } from "@/lib/utils";
+import { resolveImageSrc } from "@/lib/image-url";
 
 interface ImageUploadProps {
   value: string;
@@ -80,7 +81,7 @@ export function ImageUpload({ value, onChange, label = "Image" }: ImageUploadPro
         <p className="mt-1 text-sm text-red-600">{error}</p>
       )}
       {value && (
-        <img src={value} alt="Preview" className="mt-2 h-20 rounded object-cover" />
+        <img src={resolveImageSrc(value) ?? value} alt="Preview" className="mt-2 h-20 rounded object-cover" />
       )}
     </div>
   );
