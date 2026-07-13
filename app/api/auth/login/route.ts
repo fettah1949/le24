@@ -24,7 +24,28 @@ export async function POST(request: NextRequest) {
     await createSession(user);
 
     return NextResponse.json({ success: true });
-  } catch {
+  } catch (err) {
+    console.error("Login error:", err);
+
+    if (err instanceof Error) {
+      if (err.message.includes("NEXTAUTH_SECRET")) {
+        return NextResponse.json(
+          { error: "Configuration: NEXTAUTH_SECRET manquant ou invalide sur Vercel" },
+          { status: 500 }
+        );
+      }
+      if (
+        err.message.includes("DATABASE_URL") ||
+        err.message.includes("Can't reach database") ||
+        err.message.includes("connect")
+      ) {
+        return NextResponse.json(
+          { error: "Configuration: DATABASE_URL manquant ou incorrect sur Vercel" },
+          { status: 500 }
+        );
+      }
+    }
+
     return serverError();
   }
 }
