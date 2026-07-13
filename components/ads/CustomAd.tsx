@@ -3,7 +3,7 @@ import Link from "next/link";
 import type { Ad } from "@prisma/client";
 import { sanitizeHtml } from "@/lib/sanitize";
 import { AD_SLOTS, type AdSlotId } from "@/lib/ads/slots";
-
+import { cn } from "@/lib/utils";
 interface CustomAdProps {
   ad: Ad;
   slot: AdSlotId;
@@ -15,7 +15,7 @@ export function CustomAd({ ad, slot, label }: CustomAdProps) {
 
   if (ad.type === "HTML" && ad.htmlCode) {
     return (
-      <AdWrapper label={label} minHeight={config.minHeight}>
+      <AdWrapper label={label} heightClass={config.heightClass}>
         <div
           className="w-full overflow-hidden"
           dangerouslySetInnerHTML={{ __html: sanitizeHtml(ad.htmlCode) }}
@@ -27,10 +27,8 @@ export function CustomAd({ ad, slot, label }: CustomAdProps) {
   if (ad.type === "IMAGE" && ad.imageUrl) {
     const content = (
       <div
-        className="relative w-full overflow-hidden rounded-lg bg-gray-100"
-        style={{ minHeight: config.minHeight }}
-      >
-        <Image
+        className={cn("relative w-full overflow-hidden rounded-lg bg-gray-100", config.heightClass)}
+      >        <Image
           src={ad.imageUrl}
           alt={ad.name}
           fill
@@ -41,7 +39,7 @@ export function CustomAd({ ad, slot, label }: CustomAdProps) {
     );
 
     return (
-      <AdWrapper label={label} minHeight={config.minHeight}>
+      <AdWrapper label={label} heightClass={config.heightClass}>
         {ad.linkUrl ? (
           <Link
             href={ad.linkUrl}
@@ -63,19 +61,15 @@ export function CustomAd({ ad, slot, label }: CustomAdProps) {
 
 function AdWrapper({
   label,
-  minHeight,
+  heightClass,
   children,
 }: {
   label: string;
-  minHeight: number;
+  heightClass: string;
   children: React.ReactNode;
 }) {
   return (
-    <aside
-      className="ad-slot my-4 w-full"
-      aria-label={label}
-      style={{ minHeight }}
-    >
+    <aside className={cn("ad-slot my-4 w-full", heightClass)} aria-label={label}>
       <p className="mb-1 text-center text-[10px] uppercase tracking-wider text-news-muted">
         {label}
       </p>

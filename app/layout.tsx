@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 
 import { headers } from "next/headers";
 
@@ -56,11 +56,15 @@ const cairo = Cairo({
 
 
 export const metadata: Metadata = {
-
   title: getSiteName(),
-
   description: "Actualités 24h/24",
+};
 
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  viewportFit: "cover",
+  themeColor: "#1d4ed8",
 };
 
 

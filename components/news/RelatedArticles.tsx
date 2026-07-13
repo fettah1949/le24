@@ -45,21 +45,36 @@ export function BreakingNewsTicker({
 
   return (
     <div className="bg-news-accent text-white">
-      <div className="container-main flex items-center gap-4 py-2">
-        <span className="flex-shrink-0 rounded bg-white/20 px-2 py-0.5 text-xs font-bold uppercase">
+      <div className="container-main flex items-center gap-2 py-2 sm:gap-4">
+        <span className="flex-shrink-0 rounded bg-white/20 px-1.5 py-0.5 text-[10px] font-bold uppercase sm:px-2 sm:text-xs">
           {dict.article.breaking}
         </span>
-        <div className="overflow-hidden">
-          <div className="flex animate-marquee gap-8 whitespace-nowrap">
-            {[...articles, ...articles].map((article, i) => (
-              <Link
-                key={`${article.id}-${i}`}
-                href={localizedPath(locale, `/news/${article.slug}`)}
-                className="text-sm font-medium hover:underline"
-              >
-                {article.title}
-              </Link>
+        <div className="min-w-0 flex-1 overflow-hidden">
+          {/* Static list on mobile, marquee on md+ */}
+          <ul className="flex flex-col gap-1 md:hidden">
+            {articles.slice(0, 2).map((article) => (
+              <li key={article.id} className="truncate">
+                <Link
+                  href={localizedPath(locale, `/news/${article.slug}`)}
+                  className="text-xs font-medium hover:underline"
+                >
+                  {article.title}
+                </Link>
+              </li>
             ))}
+          </ul>
+          <div className="hidden overflow-hidden md:block">
+            <div className="flex animate-marquee gap-8 whitespace-nowrap">
+              {[...articles, ...articles].map((article, i) => (
+                <Link
+                  key={`${article.id}-${i}`}
+                  href={localizedPath(locale, `/news/${article.slug}`)}
+                  className="text-sm font-medium hover:underline"
+                >
+                  {article.title}
+                </Link>
+              ))}
+            </div>
           </div>
         </div>
       </div>

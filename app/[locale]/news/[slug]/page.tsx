@@ -86,9 +86,9 @@ export default async function ArticlePage({ params }: PageProps) {
     <>
       <JsonLd data={jsonLd} />
 
-      <article className="container-main py-8">
-        <div className="lg:grid lg:grid-cols-[1fr_300px] lg:gap-8">
-          <div>
+      <article className="container-main py-5 sm:py-8">
+        <div className="lg:grid lg:grid-cols-[1fr_280px] lg:gap-8 xl:grid-cols-[1fr_300px]">
+          <div className="min-w-0">
         <Breadcrumbs
           items={breadcrumbItems}
           locale={locale}
@@ -104,7 +104,7 @@ export default async function ArticlePage({ params }: PageProps) {
             {article.category.name}
           </Link>
 
-          <h1 className="mt-3 text-3xl font-bold leading-tight md:text-4xl lg:text-5xl">
+          <h1 className="mt-2 text-2xl font-bold leading-tight sm:mt-3 sm:text-3xl md:text-4xl lg:text-5xl">
             {article.title}
           </h1>
 
@@ -170,7 +170,11 @@ export default async function ArticlePage({ params }: PageProps) {
           </div>
         )}
 
-        <AdSlot slot="article-bottom" label={dict.ads.label} className="mt-8" />
+        <AdSlot slot="article-bottom" label={dict.ads.label} className="mt-6 sm:mt-8" />
+
+        <div className="mt-6 lg:hidden">
+          <AdSlot slot="sidebar" label={dict.ads.label} />
+        </div>
 
         <RelatedArticles articles={related} locale={locale} dict={dict} />
           </div>

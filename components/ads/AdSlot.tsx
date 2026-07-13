@@ -35,9 +35,8 @@ export async function AdSlot({ slot, label, className }: AdSlotProps) {
     const config = AD_SLOTS[slot];
     return (
       <aside
-        className={cn("ad-slot my-4 w-full", className)}
+        className={cn("ad-slot my-4 w-full", config.heightClass, className)}
         aria-label={label}
-        style={{ minHeight: config.minHeight }}
       >
         <p className="mb-1 text-center text-[10px] uppercase tracking-wider text-news-muted">
           {label}
@@ -56,10 +55,10 @@ export async function AdSlot({ slot, label, className }: AdSlotProps) {
       <aside
         className={cn(
           "ad-slot my-4 flex w-full flex-col items-center justify-center rounded-lg border-2 border-dashed border-gray-300 bg-gray-50",
+          config.heightClass,
           className
         )}
         aria-label={label}
-        style={{ minHeight: config.minHeight }}
       >
         <p className="text-[10px] uppercase tracking-wider text-news-muted">
           {label}

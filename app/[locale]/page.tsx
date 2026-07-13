@@ -70,13 +70,13 @@ export default async function HomePage({ params }: PageProps) {
       <BreakingNewsTicker articles={breakingNews} locale={locale} dict={dict} />
       <CategoryNav categories={categories} locale={locale} dict={dict} />
 
-      <div className="container-main py-8">
+      <div className="container-main py-5 sm:py-8">
         <section>
           <SectionHeading
             title={dict.home.topStories}
             subtitle={dict.home.topStoriesSub}
           />
-          <div className="grid gap-6 lg:grid-cols-3">
+          <div className="grid gap-4 sm:gap-6 lg:grid-cols-3">
             {featured && (
               <div className="lg:col-span-2">
                 <ArticleCard
@@ -102,9 +102,9 @@ export default async function HomePage({ params }: PageProps) {
           </div>
         </section>
 
-        <section className="mt-12">
+        <section className="mt-8 sm:mt-12">
           <SectionHeading title={dict.home.latestNews} />
-          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="grid gap-4 sm:grid-cols-2 sm:gap-6 lg:grid-cols-3">
             {latestNews.map((article, i) => (
               <ArticleCard
                 key={article.id}
@@ -117,9 +117,9 @@ export default async function HomePage({ params }: PageProps) {
           </div>
         </section>
 
-        <AdSlot slot="home-mid" label={dict.ads.label} className="mt-12" />
+        <AdSlot slot="home-mid" label={dict.ads.label} className="mt-8 sm:mt-12" />
 
-        <div className="mt-12 grid gap-8 lg:grid-cols-3">
+        <div className="mt-8 grid gap-6 sm:mt-12 sm:gap-8 lg:grid-cols-3">
           <section className="lg:col-span-2">
             <SectionHeading
               title={dict.home.trending}
@@ -139,7 +139,7 @@ export default async function HomePage({ params }: PageProps) {
           </section>
 
           <aside className="space-y-6">
-            <AdSlot slot="sidebar" label={dict.ads.label} className="sticky top-20" />
+            <AdSlot slot="sidebar" label={dict.ads.label} className="lg:sticky lg:top-20" />
             <SectionHeading title={dict.home.categories} />
             <ul className="space-y-2">
               {categories.map((cat) => (

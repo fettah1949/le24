@@ -70,7 +70,7 @@ export default async function CategoryPage({ params, searchParams }: PageProps) 
         ])}
       />
 
-      <div className="container-main py-8">
+      <div className="container-main py-5 sm:py-8">
         <Breadcrumbs
           items={[{ label: category.name }]}
           locale={locale}

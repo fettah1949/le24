@@ -24,10 +24,11 @@ export function Pagination({
   );
 
   return (
-    <nav aria-label={dict.pagination.aria} className={cn("flex justify-center gap-1", className)}>
+    <nav aria-label={dict.pagination.aria} className={cn("flex flex-wrap justify-center gap-1.5 sm:gap-2", className)}>
       {currentPage > 1 && (
-        <Link href={`${basePath}?page=${currentPage - 1}`} className="btn-secondary px-3 py-1.5">
-          {dict.pagination.prev}
+        <Link href={`${basePath}?page=${currentPage - 1}`} className="btn-secondary px-3 py-1.5 text-xs sm:text-sm">
+          <span className="sm:hidden">←</span>
+          <span className="hidden sm:inline">{dict.pagination.prev}</span>
         </Link>
       )}
 
@@ -55,8 +56,9 @@ export function Pagination({
       })}
 
       {currentPage < totalPages && (
-        <Link href={`${basePath}?page=${currentPage + 1}`} className="btn-secondary px-3 py-1.5">
-          {dict.pagination.next}
+        <Link href={`${basePath}?page=${currentPage + 1}`} className="btn-secondary px-3 py-1.5 text-xs sm:text-sm">
+          <span className="hidden sm:inline">{dict.pagination.next}</span>
+          <span className="sm:hidden">→</span>
         </Link>
       )}
     </nav>

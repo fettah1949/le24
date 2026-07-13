@@ -15,9 +15,9 @@ export function Footer({ locale, dict }: FooterProps) {
   const year = new Date().getFullYear();
 
   return (
-    <footer className="mt-16 border-t border-news-border bg-news-text text-white">
-      <div className="container-main py-12">
-        <div className="grid gap-8 md:grid-cols-3">
+    <footer className="mt-10 border-t border-news-border bg-news-text text-white sm:mt-16">
+      <div className="container-main py-8 sm:py-12">
+        <div className="grid gap-6 sm:grid-cols-2 sm:gap-8 md:grid-cols-3">
           <div>
             <h3 className="text-xl font-bold">
               <span className="font-semibold text-white/90">Le</span>24

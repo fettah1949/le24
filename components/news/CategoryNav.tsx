@@ -17,12 +17,12 @@ interface CategoryNavProps {
 export function CategoryNav({ categories, locale, dict }: CategoryNavProps) {
   return (
     <nav aria-label={dict.home.categories} className="border-b border-news-border bg-white">
-      <div className="container-main">
-        <ul className="flex gap-1 overflow-x-auto py-3 scrollbar-hide">
+      <div className="container-main scroll-fade-x">
+        <ul className="flex gap-1 overflow-x-auto py-2.5 scrollbar-hide sm:py-3 snap-x snap-mandatory">
           <li>
             <Link
               href={localizedPath(locale)}
-              className="whitespace-nowrap rounded-full px-4 py-1.5 text-sm font-medium text-news-text hover:bg-brand-50 hover:text-brand-600 transition-colors"
+              className="snap-start whitespace-nowrap rounded-full px-3 py-2 text-sm font-medium text-news-text hover:bg-brand-50 hover:text-brand-600 transition-colors sm:px-4 sm:py-1.5"
             >
               {dict.nav.all}
             </Link>
@@ -31,7 +31,7 @@ export function CategoryNav({ categories, locale, dict }: CategoryNavProps) {
             <li key={cat.id}>
               <Link
                 href={localizedPath(locale, `/category/${cat.slug}`)}
-                className="whitespace-nowrap rounded-full px-4 py-1.5 text-sm font-medium text-news-muted hover:bg-brand-50 hover:text-brand-600 transition-colors"
+                className="snap-start whitespace-nowrap rounded-full px-3 py-2 text-sm font-medium text-news-muted hover:bg-brand-50 hover:text-brand-600 transition-colors sm:px-4 sm:py-1.5"
               >
                 {cat.name}
                 {cat._count && (
