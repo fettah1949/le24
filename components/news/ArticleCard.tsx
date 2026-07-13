@@ -1,7 +1,6 @@
 import Link from "next/link";
-import Image from "next/image";
 import { cn, formatRelativeDate } from "@/lib/utils";
-import { resolveImageSrc } from "@/lib/image-url";
+import { NewsImage } from "@/components/news/NewsImage";
 import { localizedPath } from "@/lib/i18n/paths";
 import type { Locale } from "@/lib/i18n/config";
 import type { Dictionary } from "@/lib/i18n/types";
@@ -31,20 +30,20 @@ export function ArticleCard({
     return (
       <article className={cn("group relative overflow-hidden rounded-lg sm:rounded-xl", className)}>
         <Link href={newsHref} className="block">
-          <div className="relative aspect-[16/10] overflow-hidden sm:aspect-[16/9]">
+          <div className="relative min-h-[260px] aspect-[4/3] overflow-hidden sm:min-h-[320px] sm:aspect-[16/10] lg:aspect-[16/9] lg:min-h-[380px]">
             {article.featuredImage ? (
-              <Image
-                src={resolveImageSrc(article.featuredImage) ?? article.featuredImage}
+              <NewsImage
+                src={article.featuredImage}
                 alt={article.title}
                 fill
                 priority={priority}
-                className="object-cover transition-transform duration-500 group-hover:scale-105"
-                sizes="(max-width: 640px) 100vw, (max-width: 1024px) 100vw, 66vw"
+                className="object-cover object-[center_35%] transition-transform duration-500 group-hover:scale-105"
+                sizes="(max-width: 1024px) 100vw, 66vw"
               />
             ) : (
               <div className="absolute inset-0 bg-gradient-to-br from-brand-700 to-brand-900" />
             )}
-            <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/35 to-transparent" />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-black/5" />
             <div className="absolute bottom-0 left-0 right-0 p-4 sm:p-6">
               {article.isBreaking && (
                 <span className="mb-2 inline-block rounded bg-news-accent px-2 py-0.5 text-[10px] font-bold uppercase text-white sm:text-xs">
@@ -84,11 +83,11 @@ export function ArticleCard({
           className="relative block h-20 w-24 flex-shrink-0 overflow-hidden rounded-lg sm:h-28 sm:w-40"
         >
           {article.featuredImage ? (
-            <Image
-              src={resolveImageSrc(article.featuredImage) ?? article.featuredImage}
+            <NewsImage
+              src={article.featuredImage}
               alt={article.title}
               fill
-              className="object-cover transition-transform group-hover:scale-105"
+              className="object-cover object-center transition-transform group-hover:scale-105"
               sizes="(max-width: 640px) 96px, 160px"
             />
           ) : (
@@ -141,12 +140,12 @@ export function ArticleCard({
       <Link href={newsHref} className="block">
         <div className="relative aspect-[16/10] overflow-hidden rounded-lg">
           {article.featuredImage ? (
-            <Image
-              src={resolveImageSrc(article.featuredImage) ?? article.featuredImage}
+            <NewsImage
+              src={article.featuredImage}
               alt={article.title}
               fill
               priority={priority}
-              className="object-cover transition-transform duration-300 group-hover:scale-105"
+              className="object-cover object-center transition-transform duration-300 group-hover:scale-105"
               sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
             />
           ) : (

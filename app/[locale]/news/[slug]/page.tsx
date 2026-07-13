@@ -1,9 +1,8 @@
 import { notFound } from "next/navigation";
-import Image from "next/image";
 import Link from "next/link";
 import type { Metadata } from "next";
 import { Breadcrumbs } from "@/components/news/Breadcrumbs";
-import { resolveImageSrc } from "@/lib/image-url";
+import { NewsImage } from "@/components/news/NewsImage";
 import { RelatedArticles } from "@/components/news/RelatedArticles";
 import {
   getPublishedArticleBySlug,
@@ -141,12 +140,12 @@ export default async function ArticlePage({ params }: PageProps) {
 
         {article.featuredImage && (
           <div className="relative mt-8 aspect-[16/9] max-w-4xl overflow-hidden rounded-xl">
-            <Image
-              src={resolveImageSrc(article.featuredImage) ?? article.featuredImage}
+            <NewsImage
+              src={article.featuredImage}
               alt={article.title}
               fill
               priority
-              className="object-cover"
+              className="object-cover object-center"
               sizes="(max-width: 1024px) 100vw, 896px"
             />
           </div>
