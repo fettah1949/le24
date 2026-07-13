@@ -33,7 +33,7 @@ async function uploadToCloudinary(buffer: Buffer, ext: string): Promise<string> 
   const formData = new FormData();
   formData.append(
     "file",
-    new Blob([buffer], { type: getMime(ext) }),
+    new Blob([new Uint8Array(buffer)], { type: getMime(ext) }),
     `upload.${ext}`
   );
   formData.append("api_key", apiKey);
@@ -75,12 +75,16 @@ async function uploadToLocal(buffer: Buffer, ext: string): Promise<string> {
   return `/uploads/${filename}`;
 }
 
+function hasVercelBlobConfig(): boolean {
+  return !!(process.env.BLOB_READ_WRITE_TOKEN || process.env.BLOB_STORE_ID);
+}
+
 export async function storeImage(buffer: Buffer, ext: string): Promise<string> {
   if (hasCloudinaryConfig()) {
     return uploadToCloudinary(buffer, ext);
   }
 
-  if (process.env.BLOB_READ_WRITE_TOKEN) {
+  if (hasVercelBlobConfig()) {
     return uploadToVercelBlob(buffer, ext);
   }
 
