@@ -1,8 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
-import { writeFile, mkdir } from "fs/promises";
-import path from "path";
 import { detectImageType } from "@/lib/file-validation";
 import { ensureAdmin, serverError } from "@/lib/api-helpers";
+import { storeImage } from "@/lib/image-storage";
 
 const ALLOWED_MIME = new Set([
   "image/jpeg",
@@ -36,21 +35,23 @@ export async function POST(request: NextRequest) {
     const detected = detectImageType(buffer);
     if (!detected || !ALLOWED_MIME.has(detected.mime)) {
       return NextResponse.json(
-        { error: "Type de fichier non autorisé" },
+        {
+          error:
+            "Format non supporté. Utilisez JPG, PNG, WebP ou GIF (pas HEIC).",
+        },
         { status: 400 }
       );
     }
 
-    const ext = detected.ext;
-    const filename = `${Date.now()}-${crypto.randomUUID()}.${ext}`;
-    const uploadDir = path.join(process.cwd(), "public", "uploads");
-
-    await mkdir(uploadDir, { recursive: true });
-    await writeFile(path.join(uploadDir, filename), buffer);
-
-    const url = `/uploads/${filename}`;
+    const url = await storeImage(buffer, detected.ext);
     return NextResponse.json({ url });
-  } catch {
+  } catch (err) {
+    console.error("Upload error:", err);
+
+    if (err instanceof Error && err.message.includes("Stockage cloud")) {
+      return NextResponse.json({ error: err.message }, { status: 503 });
+    }
+
     return serverError();
   }
 }
