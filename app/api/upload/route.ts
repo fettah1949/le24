@@ -1,7 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
 import { detectImageType } from "@/lib/file-validation";
-import { ensureAdmin, serverError } from "@/lib/api-helpers";
-import { storeImage } from "@/lib/image-storage";
+import { ensureAdmin } from "@/lib/api-helpers";
+import { storeImage, formatUploadError } from "@/lib/image-storage";
+
+export const runtime = "nodejs";
 
 const ALLOWED_MIME = new Set([
   "image/jpeg",
@@ -47,11 +49,9 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ url });
   } catch (err) {
     console.error("Upload error:", err);
-
-    if (err instanceof Error && err.message.includes("Stockage cloud")) {
-      return NextResponse.json({ error: err.message }, { status: 503 });
-    }
-
-    return serverError();
+    return NextResponse.json(
+      { error: formatUploadError(err) },
+      { status: 500 }
+    );
   }
 }

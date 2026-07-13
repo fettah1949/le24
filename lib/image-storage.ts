@@ -21,6 +21,46 @@ function hasCloudinaryConfig(): boolean {
   );
 }
 
+function getBlobAccess(): "public" | "private" {
+  return process.env.BLOB_ACCESS === "private" ? "private" : "public";
+}
+
+async function getVercelBlobAuth(): Promise<{
+  token?: string;
+  oidcToken?: string;
+  storeId?: string;
+}> {
+  if (process.env.BLOB_READ_WRITE_TOKEN) {
+    return { token: process.env.BLOB_READ_WRITE_TOKEN };
+  }
+
+  const storeId = process.env.BLOB_STORE_ID;
+  if (!storeId) {
+    throw new Error(
+      "Blob non configuré. Connectez le24-blob au projet sur Vercel."
+    );
+  }
+
+  const oidcToken = process.env.VERCEL_OIDC_TOKEN;
+  if (oidcToken) {
+    return { oidcToken, storeId };
+  }
+
+  try {
+    const { getVercelOidcToken } = await import("@vercel/oidc");
+    const fetched = await getVercelOidcToken();
+    if (fetched) {
+      return { oidcToken: fetched, storeId };
+    }
+  } catch {
+    // fall through
+  }
+
+  throw new Error(
+    "Authentification Blob échouée. Dans Vercel → Storage → le24-blob, copiez le Read/Write Token et ajoutez BLOB_READ_WRITE_TOKEN aux variables d'environnement, puis redéployez."
+  );
+}
+
 async function uploadToCloudinary(buffer: Buffer, ext: string): Promise<string> {
   const cloudName = process.env.CLOUDINARY_CLOUD_NAME!;
   const apiKey = process.env.CLOUDINARY_API_KEY!;
@@ -60,10 +100,15 @@ async function uploadToCloudinary(buffer: Buffer, ext: string): Promise<string> 
 async function uploadToVercelBlob(buffer: Buffer, ext: string): Promise<string> {
   const { put } = await import("@vercel/blob");
   const filename = `uploads/${Date.now()}-${crypto.randomUUID()}.${ext}`;
+  const auth = await getVercelBlobAuth();
+
   const blob = await put(filename, buffer, {
-    access: "public",
+    access: getBlobAccess(),
     contentType: getMime(ext),
+    addRandomSuffix: false,
+    ...auth,
   });
+
   return blob.url;
 }
 
@@ -90,9 +135,22 @@ export async function storeImage(buffer: Buffer, ext: string): Promise<string> {
 
   if (process.env.VERCEL === "1") {
     throw new Error(
-      "Stockage cloud requis en production. Configurez Cloudinary ou Vercel Blob."
+      "Stockage cloud requis en production. Configurez Vercel Blob ou Cloudinary."
     );
   }
 
   return uploadToLocal(buffer, ext);
+}
+
+export function formatUploadError(err: unknown): string {
+  if (err instanceof Error) {
+    if (err.message.includes("Access denied")) {
+      return "Accès Blob refusé. Ajoutez BLOB_READ_WRITE_TOKEN depuis Vercel → Storage → le24-blob.";
+    }
+    if (err.message.includes("No blob credentials")) {
+      return "Credentials Blob manquants. Ajoutez BLOB_READ_WRITE_TOKEN sur Vercel.";
+    }
+    return err.message;
+  }
+  return "Erreur serveur";
 }
